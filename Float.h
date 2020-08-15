@@ -14,6 +14,7 @@
 #include <string>
 #include <cctype>
 #include <cinttypes>
+#include <unistd.h>
 #include <climits>
 #include <sstream>
 #include <cmath>
@@ -156,10 +157,29 @@ inline bool is_little_endian(){
 
 void Reverse_Bit_Representation(std::string &str);
 
+//------------------------------------------------------------------------------
+// string_to_lower: convert string to lowercase.
+//------------------------------------------------------------------------------
 inline void string_to_lower(std::string &str){
     for (char &i : str)
 	i = tolower(i);
 }
+
+//------------------------------------------------------------------------------
+// Print declarations
+//------------------------------------------------------------------------------
+void print_instructions();
+
+inline void print_dash_line(){
+    for (int16_t i = 0; i < window_size; i++)
+	std::cout << window_character;
+    std::cout << std::endl;
+}
+
+//------------------------------------------------------------------------------
+// Input Declarations
+//------------------------------------------------------------------------------
+bool is_valid_number(std::string &str);
 
 #endif
 

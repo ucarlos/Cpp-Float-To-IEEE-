@@ -192,7 +192,11 @@ std::ostream& operator<<(std::ostream &os, const Float_Number &fn){
 	      (!(fn.sign_val) ? "Positive Infinity" : "Negative Infinity")
 	      : "Not A Number (NaN)")
 	  << "\n";
-    
+
+    // Additional Information:
+    o << "Additional Info:\n" << "Object size: "
+      << sizeof(Float_Number) << " bytes\n";
+
     return os << o.str();
 }
 
