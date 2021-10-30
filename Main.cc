@@ -45,30 +45,9 @@ void print_instructions(){
 }
 
 void compute(){
-    std::string str, value;
     print_instructions();
-    std::cin >> str;
-    string_to_lower(str);
-    
-    while (!(str == "float" or str == "double")){
-		std::cout << "INVALID option. Enter either \"float\" or \"double\".\n";
-		std::cin >> str;
-    }
-
-    // Now check number:
-    std::cout << "Next, enter a number.\n";
-    std::cin >> value;
-    while (!(is_valid_number(value))){
-		std::cout << "INVALID number. Try again." << std::endl;
-		std::cin >> value;
-    }
-    
-    std::stringstream ss;
-    ss << value;
-    double temp;
-    ss >> temp;
-    
-    FloatNumber fn(str, temp);
+    FloatNumber fn;
+    std::cin >> fn;
     std::cout << fn;
 }
 

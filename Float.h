@@ -81,7 +81,10 @@ enum Normalization_Status {
 };
 
 
-
+union datatype_value {
+    double double_val;
+    float float_val;
+};
 //------------------------------------------------------------------------------
 // FloatNumber class
 //------------------------------------------------------------------------------
@@ -118,10 +121,7 @@ private:
     uint64_t fractional{0};
     uint64_t byte_rep{0};
     
-    union datatype_value {
-		double double_val;
-		float float_val;
-    } value;
+    union datatype_value value;
     
     int32_t weighed_bias{0};
     enum Floating_Number_Status float_status{INVALID};
@@ -148,19 +148,9 @@ private:
 // Function declarations
 //-------------------------------------------------------------------------------
 
-void Reverse_Bit_Representation(std::string &str);
+void string_to_lower(std::string &str);
 
-//------------------------------------------------------------------------------
-// Function definitions
-//------------------------------------------------------------------------------
-/**
- * Convert a string to lowercase.
- * @param str
- */
-inline void string_to_lower(std::string &str){
-    for (char &i : str)
-		i = tolower(i);
-}
+
 
 //------------------------------------------------------------------------------
 // Print declarations
@@ -169,8 +159,6 @@ void print_instructions();
 
 void print_dash_line(std::ostream &os);
 void print_dash_line();
-
-
 
 
 //------------------------------------------------------------------------------

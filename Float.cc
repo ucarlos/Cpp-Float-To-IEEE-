@@ -14,6 +14,11 @@
 // FloatNumber public definitions
 //------------------------------------------------------------------------------
 
+/**
+ * Specified Constructor
+ * @param type
+ * @param value
+ */
 FloatNumber::FloatNumber(std::string type, double value){
     // Check if string is either float or double
     // throw exception otherwise
@@ -156,9 +161,41 @@ void FloatNumber::generate_significand(){
 }
 
 /**
- * Unimplemented istream operator.
+ * Your typical istream operator. Reads to a FloatNumber object.
+ * @param is istream to read from
+ * @param fn An Floating Number object
+ * @returns the istream parameter.
  */
 std::istream& operator>>(std::istream &is, FloatNumber &fn){
+
+    std::string floating_type;
+
+    is >> floating_type;
+    string_to_lower(floating_type);
+
+    while (!(floating_type == "double" || floating_type == "float")) {
+        std::cerr << "INVALID option. Enter either \"float\" or \"double\".\n";
+        is >> floating_type;
+    }
+
+    // Now compute the value:
+    std::string string_value;
+    is >> string_value;
+
+    while (!is_valid_number(string_value)) {
+        std::cerr << "INVALID number. Try again." << std::endl;
+        is >> string_value;
+    }
+
+    // Everything went well, now create an object:
+    static std::istringstream iss;
+    iss.str(string_value);
+
+    double value;
+    iss >> value;
+    FloatNumber number{floating_type, value};
+    fn = number;
+
     return is;
 }
 
@@ -232,8 +269,22 @@ std::ostream& operator<<(std::ostream &os, const FloatNumber &fn){
 }
 
 //------------------------------------------------------------------------------
-// Print definitions
+// Function definitions
 //------------------------------------------------------------------------------
+/**
+ * Convert a string to lowercase.
+ * @param str
+ */
+inline void string_to_lower(std::string &str){
+    for (char &i : str)
+        i = tolower(i);
+}
+
+/**
+ * Print a dashed line the size of the window size.
+ * The character is defined by the window_character variable.
+ * @param os
+ */
 void print_dash_line(std::ostream &os) {
 	for (uint8_t i = 0; i < window_size; i++)
 		os << window_character;
