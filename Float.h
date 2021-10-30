@@ -53,55 +53,60 @@
 const char window_character = '-';
 const int window_size = 80;
 
-// Byte pointer:
-// using byte_pointer = unsigned char *;
-typedef unsigned char *byte_pointer;
-
 //------------------------------------------------------------------------------
-// Enums:
+// Enums
 //------------------------------------------------------------------------------
 
 /*
- * Enum Status:
- * Invalid:      Constructor Invariant
- * Normalized:   Floating Value (Exponent not 0 or 255(2047 for Double))
- * Denormalized: Floating Value (Exponent is 0)
+ * Floating Number Status:
+ * INVALID:      Constructor Invariant
+ * NORMALIZED:   Floating Value (Exponent not 0 or 255(2047 for Double))
+ * DENORMALIZED: Floating Value (Exponent is 0)
  * Special Case: Floating Value (Exponent is 255 or 2047))
  *
 */
-enum Floating_Number_Status{
-    Invalid = -1, Normalized = 0, Denormalized, Special_Case
+enum Floating_Number_Status {
+    INVALID = -1, NORMALIZED = 0, DENORMALIZED, SPECIAL_CASE
 };
 
 /*
  * Normalization Status:
- * Initialized: Initial value
- * Not_Separated: Byte Representation has been created, but Number has not
+ * INITIALIZED:   Initial value
+ * NOT_SEPERATED: Byte Representation has been created, but Number has not
  *                been separated.
- * Separated: Number is ready to be classified.
+ * SEPERATED:     Number is ready to be classified.
 */
-
-enum Normalization_Status{
-    Initialized = 0, Not_Separated, Separated
+enum Normalization_Status {
+    INITIALIZED = 0, NOT_SEPERATED, SEPERATED
 };
 
-class Float_Number{
+
+
+//------------------------------------------------------------------------------
+// FloatNumber class
+//------------------------------------------------------------------------------
+class FloatNumber {
 public:
-    Float_Number(){
-	this->value.float_val = 0;
-	generate_number();
+    FloatNumber() {
+        this->value.double_val = 0;
+		this->value.float_val = 0;
+		generate_number();
     }
     
-    explicit Float_Number(double value){
-	this->value.double_val = value;
-	this->isDouble = true;
-	generate_number();
+    explicit FloatNumber(double value) {
+		this->value.double_val = value;
+		this->isDouble = true;
+		generate_number();
     }
-    bool is_double() { return isDouble; }
-    Float_Number(std::string type, double value);
     
-    Float_Number(const Float_Number &fn) =default; // Copy Constructor
-    Float_Number& operator=(const Float_Number &fn) =default; // Copy Assignment
+    bool is_double() const { return isDouble; }
+    FloatNumber(std::string type, double value);
+
+	// Copy Constructor
+    FloatNumber(const FloatNumber &fn) =default;
+
+	// Copy Assignment
+    FloatNumber& operator=(const FloatNumber &fn) =default;
     
     void change_type(std::string &type);
     void change_value(double new_value);
@@ -113,25 +118,25 @@ private:
     uint64_t fractional{0};
     uint64_t byte_rep{0};
     
-    union datatype_value{
-	double double_val;
-	float float_val;
+    union datatype_value {
+		double double_val;
+		float float_val;
     } value;
     
     int32_t weighed_bias{0};
-    enum Floating_Number_Status float_status{Invalid};
-    enum Normalization_Status norm_status{Initialized};
+    enum Floating_Number_Status float_status{INVALID};
+    enum Normalization_Status norm_status{INITIALIZED};
     bool isDouble{false};
 
     // Operator Overloading
-    friend std::istream& operator>>(std::istream &is, Float_Number &fn);
-    friend std::ostream& operator<<(std::ostream &os, const Float_Number &fn);
+    friend std::istream& operator>>(std::istream &is, FloatNumber &fn);
+    friend std::ostream& operator<<(std::ostream &os, const FloatNumber &fn);
 
     // Private declarations
     void generate_number() {
-	create_bit_representation();
-	seperate_number();
-	generate_significand();
+		create_bit_representation();
+		seperate_number();
+		generate_significand();
     }
     
     void create_bit_representation();
@@ -140,29 +145,21 @@ private:
 };
 
 //-------------------------------------------------------------------------------
-// Helper functions
+// Function declarations
 //-------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
-// is_little_endian(): Check if the machine uses little endian byte ordering
-// or not. This determines if the string has to be reversed in order to get
-// the correct values.
-//------------------------------------------------------------------------------
-inline bool is_little_endian(){
-    int value = 1;
-    char *check = (char *) &value;
-    return (*check) != 0;
-
-}
 
 void Reverse_Bit_Representation(std::string &str);
 
 //------------------------------------------------------------------------------
-// string_to_lower: convert string to lowercase.
+// Function definitions
 //------------------------------------------------------------------------------
+/**
+ * Convert a string to lowercase.
+ * @param str
+ */
 inline void string_to_lower(std::string &str){
     for (char &i : str)
-	i = tolower(i);
+		i = tolower(i);
 }
 
 //------------------------------------------------------------------------------
@@ -170,11 +167,11 @@ inline void string_to_lower(std::string &str){
 //------------------------------------------------------------------------------
 void print_instructions();
 
-inline void print_dash_line(){
-    for (int16_t i = 0; i < window_size; i++)
-	std::cout << window_character;
-    std::cout << std::endl;
-}
+void print_dash_line(std::ostream &os);
+void print_dash_line();
+
+
+
 
 //------------------------------------------------------------------------------
 // Input Declarations
