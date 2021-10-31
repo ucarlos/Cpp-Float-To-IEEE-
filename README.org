@@ -1,0 +1,39 @@
+#+title: FloatToIEEE (C++ Edition)
+#+author: Ulysses Carlos
+
+FloatToIEEE is a simply a C++ version of Float-to-IEEE that takes advantage of OOP to break down a Single Precision (a "float") or
+Double Precision (a "double") number into its Sign, Exponent, and Significand/Mantissa components.
+
+* Usage
+FloatToIEEE can be run with no arguments like so:
+#+begin_src bash
+./FloatToIEEE
+#+end_src
+A prompt will ask the user to select a "Float" or "Double" along with a value.
+
+
+You can also run the program through the command line as well with the following options:
++ -d: Interpret with Double Precision (a "double")
++ -f: Interpret with Single Precision (a "float")
++ -h: Show a help message:    
+
+* Example
+#+begin_src bash
+./FloatToIEEE -d 1776.0704
+--------------------------------------------------------------------------------
+Floating Point Information: 
+--------------------------------------------------------------------------------
+Initial Number: 1776 (Double Precision)
+Bit Representation (In Hexadecimal): 0x409bc04816f0068e
+Sign Value: 0 (Positive)
+Exponent Value (Decimal): 1033
+Fractional Value (In Hexadecimal): 0xbc04816f0068e
+Classification: NORMALIZED (Exponent fields is neither all ones or all zeros)
+Weighed Bias value (Decimal): 10
+--------------------------------------------------------------------------------
+So in M * 2^E form, the number 1776 is represented as 1.734 * 2^10
+When multiplied, the result is 1776.07040000000006330083
+--------------------------------------------------------------------------------
+Additional Info:
+Object size: 80 bytes
+#+end_src
