@@ -6,7 +6,7 @@
  * C++ version of Float_to_IEEE
  * -----------------------------------------------------------------------------
  */
-
+#pragma once
 #ifndef FLOAT_H
 #define FLOAT_H
 

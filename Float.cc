@@ -8,7 +8,6 @@
  */
 
 #include "./Float.h"
-#include <iomanip>
 
 //------------------------------------------------------------------------------
 // FloatNumber public definitions
@@ -22,6 +21,7 @@
 FloatNumber::FloatNumber(std::string type, double value){
     // Check if string is either float or double
     // throw exception otherwise
+	
     string_to_lower(type);
     if (!(type == "float" || type == "double"))
         throw std::runtime_error("Error: FloatNumber() must be called with "
@@ -118,14 +118,14 @@ void FloatNumber::create_bit_representation(){
 void FloatNumber::seperate_number(){
     // Set the sign, exponent, and fractional parts for both doubles and floats.
     
-    if (this->isDouble){
+    if (this->isDouble) {
         uint64_t bit_rep = this->byte_rep;
     
         this->sign_val = (bit_rep & DOUBLE_SIGN_MASK) >> (DOUBLE_EXP_LEN + DOUBLE_FRAC_LEN);
         this->exponent_val = (bit_rep & DOUBLE_EXP_MASK) >> (DOUBLE_FRAC_LEN);
         this->fractional = (bit_rep & DOUBLE_FRAC_MASK);
     }
-    else{
+    else {
         uint32_t bit_rep = static_cast<uint32_t>(this->byte_rep);
 
         this->sign_val = (bit_rep & FLOAT_SIGN_MASK) >> (FLOAT_EXP_LEN + FLOAT_FRAC_LEN);
@@ -134,16 +134,17 @@ void FloatNumber::seperate_number(){
     }
 
     uint64_t temp_exponent_val = (this->isDouble) ? DOUBLE_MAX_EXPONENT_VAL
-        : FLOAT_MAX_EXPONENT_VAL;
+                                                  : FLOAT_MAX_EXPONENT_VAL;
 
-    this->float_status = (this->exponent_val == temp_exponent_val) ? (SPECIAL_CASE)
-        : ((!this->exponent_val) ? DENORMALIZED : NORMALIZED);
+    this->float_status =
+		(this->exponent_val == temp_exponent_val) ? (SPECIAL_CASE)
+                                                  : ((!this->exponent_val) ? DENORMALIZED : NORMALIZED);
     
     if (this->float_status != SPECIAL_CASE){
         int32_t temp_bias = (this->isDouble) ? DOUBLE_EXPONENT_BIAS : FLOAT_EXPONENT_BIAS;
         this->weighed_bias =
-            (!this->float_status) ? ((int32_t)this->exponent_val - temp_bias)
-            : (1 - temp_bias);
+            (!this->float_status) ? (static_cast<int32_t>(this->exponent_val) - temp_bias)
+                                  : (1 - temp_bias);
     }
 
     this->norm_status = SEPERATED;
@@ -255,7 +256,7 @@ std::ostream& operator<<(std::ostream &os, const FloatNumber &fn){
 		print_dash_line(ostringstream);
         ostringstream << "Special Case value: "
                       << (!(fn.fractional) ? (!(fn.sign_val) ? "Positive Infinity" : "Negative Infinity")
-                               : "Not A Number (NaN)")
+                                           : "Not A Number (NaN)")
                       << "\n";
 	}
 
